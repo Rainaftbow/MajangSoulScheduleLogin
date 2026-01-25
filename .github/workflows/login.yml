@@ -26,3 +26,13 @@ jobs:
 
       - name: Majangsoul login
         run: python login.py "$EMAIL" "$PASSWD"
+        
+      - name: Keep Alive
+        run: |
+            echo "Last Run: $(date)" > heartbeat.txt
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add heartbeat.txt
+            # 如果没有变化则不提交
+            git commit -m "chore: workflow heartbeat [skip ci]" || exit 0
+            git push
